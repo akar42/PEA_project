@@ -11,8 +11,8 @@ int main()
 
 	graphCreator graphCreator;
 
-	// std::vector<std::vector<int32_t>> graph = graphCreator.readGraphFromFile("graph_n_8.txt");
-	std::vector<std::vector<int32_t>> graph = graphCreator.generateRandomGraph(10, false);
+	// std::vector<std::vector<int32_t>> graph = graphCreator.readGraphFromFile("graph_n_11.txt");
+	std::vector<std::vector<int32_t>> graph = graphCreator.generateRandomGraph(18, false);
 
 	std::cout << "V_i\\V_j\t| ";
 
@@ -50,21 +50,21 @@ int main()
 	std::chrono::time_point<std::chrono::high_resolution_clock> end;
 	std::chrono::duration<double, std::milli> delta;
 
-	start = std::chrono::high_resolution_clock::now();
-	std::pair<int32_t, std::vector<int32_t>> res_bfs = algs.bfs(graph, true, start_vertex);
-	end = std::chrono::high_resolution_clock::now();
+	// start = std::chrono::high_resolution_clock::now();
+	// std::pair<int32_t, std::vector<int32_t>> res_bfs = algs.bfs(graph, true, start_vertex);
+	// end = std::chrono::high_resolution_clock::now();
 
-	delta = end - start;
+	// delta = end - start;
 
-	std::cout << "BFS - Execution time: " << delta.count() << '\n';
+	// std::cout << "BFS - Execution time: " << delta.count() << '\n';
 
-	for (int32_t vertex : res_bfs.second)
-	{
-		std::cout << vertex << " - ";
-	}
+	// for (int32_t vertex : res_bfs.second)
+	// {
+	// 	std::cout << vertex << " - ";
+	// }
 
-	std::cout << res_bfs.second[0] << '\n';
-	std::cout << res_bfs.first << '\n';
+	// std::cout << res_bfs.second[0] << '\n';
+	// std::cout << res_bfs.first << '\n';
 
 	start = std::chrono::high_resolution_clock::now();
 	std::pair<int32_t, std::vector<int32_t>> res_dfs = algs.dfs(graph, true, start_vertex);
@@ -97,7 +97,7 @@ int main()
 
 	std::cout << res_best_first.second[0] << '\n';
 	std::cout << res_best_first.first << '\n';
-	// return 0;
+	return 0;
 }
 // graph_n_6 - 150
 // graph_n_8 - 136

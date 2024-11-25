@@ -39,7 +39,7 @@ class algorithmsForTSP
 {
 private:
 	int32_t calculateLowerBound(const std::vector<std::vector<int32_t>>& graph, const Node& node, int32_t start_vertex);
-
+    std::pair<int32_t, std::vector<int32_t>> nearestNeighbour(std::vector<std::vector<int32_t>> &graph);
 public:
 	std::pair<int32_t, std::vector<int32_t>> dfs(std::vector<std::vector<int32_t>> &graph, bool isDirected, int32_t &start_vertex);
 	std::pair<int32_t, std::vector<int32_t>> bfs(std::vector<std::vector<int32_t>> &graph, bool isDirected, int32_t &start_vertex);

@@ -156,6 +156,12 @@ std::pair<int32_t, std::vector<int32_t>> algorithmsForTSP::dfs(std::vector<std::
     int n = graph.size();
     std::stack<Node, std::deque<Node>> dfs_stack;
 
+    
+    std::pair<int32_t, std::vector<int32_t>> heuristics = nearestNeighbour(graph);
+    int32_t upper_bound = heuristics.first;
+    std::vector<int32_t> optimal_path = heuristics.second;
+
+
     Node start_node(n);
     start_node.current_vertex = start_vertex;
     start_node.visited_bits = 1 << start_vertex;
@@ -169,8 +175,6 @@ std::pair<int32_t, std::vector<int32_t>> algorithmsForTSP::dfs(std::vector<std::
 
     dfs_stack.push(start_node);
 
-    int32_t upper_bound = std::numeric_limits<int32_t>::max();
-    std::vector<int32_t> optimal_path;
 
     while (!dfs_stack.empty()) {
         Node current_node = dfs_stack.top();
@@ -230,10 +234,61 @@ std::pair<int32_t, std::vector<int32_t>> algorithmsForTSP::dfs(std::vector<std::
     return {upper_bound, optimal_path};
 }
 
+std::pair<int32_t, std::vector<int32_t>> algorithmsForTSP::nearestNeighbour(std::vector<std::vector<int32_t>> &graph)
+{
+	std::vector<int32_t> best_route;
+	int32_t best_result = std::numeric_limits<int32_t>::max();
+
+	for (int start_vertex = 0; start_vertex < graph.size(); ++start_vertex)
+	{
+		std::vector<int32_t> route;
+		std::vector<bool> visited(graph.size(), false);
+		route.push_back(start_vertex);
+		visited[start_vertex] = true;
+		int32_t result = 0;
+
+		for (int i = route[0]; route.size() != graph.size(); i = route.back())
+		{
+			int32_t min = std::numeric_limits<int32_t>::max();
+			int32_t min_i = -1;
+
+			for (int j = 0; j < graph.size(); ++j)
+			{
+				if (visited[j])
+					continue;
+
+				if (graph[i][j] < min)
+				{
+					min = graph[i][j];
+					min_i = j;
+				}
+			}
+
+			route.push_back(min_i);
+			visited[min_i] = true;
+			result += min;
+		}
+
+		result += graph[route.back()][route[0]];
+
+		if (result < best_result)
+		{
+			best_result = result;
+			best_route = route;
+		}
+	}
+
+	return {best_result, best_route};
+}
+
 // BFS function for TSP using Branch and Bound
 std::pair<int32_t, std::vector<int32_t>> algorithmsForTSP::bfs(std::vector<std::vector<int32_t>> &graph, bool isDirected, int32_t &start_vertex) {
     int n = graph.size();
     std::queue<Node, std::deque<Node>> bfs_queue;
+
+    std::pair<int32_t, std::vector<int32_t>> heuristics = nearestNeighbour(graph);
+    int32_t upper_bound = heuristics.first;
+    std::vector<int32_t> optimal_path = heuristics.second;
 
     Node start_node(n);
     start_node.current_vertex = start_vertex;
@@ -248,8 +303,6 @@ std::pair<int32_t, std::vector<int32_t>> algorithmsForTSP::bfs(std::vector<std::
 
     bfs_queue.push(start_node);
 
-    int32_t upper_bound = std::numeric_limits<int32_t>::max();
-    std::vector<int32_t> optimal_path;
 
     while (!bfs_queue.empty()) {
         Node current_node = bfs_queue.front();
@@ -314,6 +367,12 @@ std::pair<int32_t, std::vector<int32_t>> algorithmsForTSP::best_first_search(std
     int n = graph.size();
     std::priority_queue<Node, std::deque<Node>> bf_priority_queue;
 
+    
+    std::pair<int32_t, std::vector<int32_t>> heuristics = nearestNeighbour(graph);
+    int32_t upper_bound = heuristics.first;
+    std::vector<int32_t> optimal_path = heuristics.second;
+
+
     Node start_node(n);
     start_node.current_vertex = start_vertex;
     start_node.visited_bits = 1 << start_vertex;
@@ -326,9 +385,6 @@ std::pair<int32_t, std::vector<int32_t>> algorithmsForTSP::best_first_search(std
     start_node.lower_bound = start_node.cost + calculateLowerBound(graph, start_node, start_vertex);
 
     bf_priority_queue.push(start_node);
-
-    int32_t upper_bound = std::numeric_limits<int32_t>::max();
-    std::vector<int32_t> optimal_path;
 
     while (!bf_priority_queue.empty()) {
         Node current_node = bf_priority_queue.top();
