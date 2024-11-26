@@ -305,7 +305,7 @@ std::pair<int32_t, std::vector<int32_t>> algorithmsForTSP::nearestNeighbour(std:
 			best_route = route;
 		}
 	}
-	std::cout << "Heuristic upper bound: " << best_result << '\n';
+
 	return {best_result, best_route};
 }
 
