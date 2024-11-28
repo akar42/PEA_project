@@ -160,10 +160,56 @@ int main(int argc, char **argv)
 		if (isDirected) break;
 	}
 
+	std::pair<int32_t, std::vector<int32_t>> brute_force = algorithmsForTSP.bruteForce(graph);
+	std::pair<int32_t, std::vector<int32_t>> nearest_neighbour = algorithmsForTSP.nearestNeighbour(graph);
+	std::pair<int32_t, std::vector<int32_t>> random = algorithmsForTSP.randomRoad(graph);
+
 	std::pair<int32_t, std::vector<int32_t>> bfs = algorithmsForTSP.bfs(graph, isDirected);
 	std::pair<int32_t, std::vector<int32_t>> dfs = algorithmsForTSP.dfs(graph, isDirected);
 	std::pair<int32_t, std::vector<int32_t>> best_first_search = algorithmsForTSP.best_first_search(graph, isDirected);
 
+	SetConsoleTextAttribute(hConsole, 15);
+
+	std::cout << '\n';
+
+	std::cout << "---Brute force---" << '\n';
+	std::cout << "Path: ";
+	SetConsoleTextAttribute(hConsole, 14);
+	for (int32_t v : brute_force.second)
+		std::cout << v << '-';
+	std::cout << brute_force.second[0] << '\n';
+	SetConsoleTextAttribute(hConsole, 15);
+	std::cout << "Cost: ";
+	SetConsoleTextAttribute(hConsole, 2);
+	std::cout << brute_force.first << '\n';
+	SetConsoleTextAttribute(hConsole, 15);
+
+		std::cout << '\n';
+
+	std::cout << "---Nearest Neighbour---" << '\n';
+	std::cout << "Path: ";
+	SetConsoleTextAttribute(hConsole, 14);
+	for (int32_t v : nearest_neighbour.second)
+		std::cout << v << '-';
+	std::cout << nearest_neighbour.second[0] << '\n';
+	SetConsoleTextAttribute(hConsole, 15);
+	std::cout << "Cost: ";
+	SetConsoleTextAttribute(hConsole, 2);
+	std::cout << nearest_neighbour.first << '\n';
+	SetConsoleTextAttribute(hConsole, 15);
+
+		std::cout << '\n';
+
+	std::cout << "---Random road---" << '\n';
+	std::cout << "Path: ";
+	SetConsoleTextAttribute(hConsole, 14);
+	for (int32_t v : random.second)
+		std::cout << v << '-';
+	std::cout << random.second[0] << '\n';
+	SetConsoleTextAttribute(hConsole, 15);
+	std::cout << "Cost: ";
+	SetConsoleTextAttribute(hConsole, 2);
+	std::cout << random.first << '\n';
 	SetConsoleTextAttribute(hConsole, 15);
 
 	std::cout << '\n';

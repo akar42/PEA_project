@@ -33,9 +33,19 @@ public:
 class algorithmsForTSP
 {
 private:
+	std::mt19937 randomEngine;
+
 	int32_t calculateLowerBound(const std::vector<std::vector<int32_t>>& graph, const Node& node, int32_t start_vertex);
-    std::pair<int32_t, std::vector<int32_t>> nearestNeighbour(std::vector<std::vector<int32_t>> &graph);
+	void permutate(std::vector<int32_t> &route, int32_t left, int32_t length, int32_t &current_result, std::vector<std::vector<int32_t>> &graph, std::vector<int32_t> &current_route);
 public:
+    //Stage 1
+
+    std::pair<int32_t, std::vector<int32_t>> nearestNeighbour(std::vector<std::vector<int32_t>> &graph);
+	std::pair<int32_t, std::vector<int32_t>> bruteForce(std::vector<std::vector<int32_t>> &graph);
+	std::pair<int32_t, std::vector<int32_t>> randomRoad(std::vector<std::vector<int32_t>> &graph);
+
+	// Stage 2
+
 	std::pair<int32_t, std::vector<int32_t>> dfs(std::vector<std::vector<int32_t>> &graph, bool isDirected);
 	std::pair<int32_t, std::vector<int32_t>> bfs(std::vector<std::vector<int32_t>> &graph, bool isDirected);
 	std::pair<int32_t, std::vector<int32_t>> best_first_search(std::vector<std::vector<int32_t>> &graph, bool isDirected);
