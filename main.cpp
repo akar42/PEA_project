@@ -292,7 +292,7 @@ std::string startTest(std::string filename)
 			fout << n << ',';
 			// -------------Undirected----------------------
 			bool isDirected = false;
-			graph = graphCreator.generateRandomGraph(n, false);
+			graph = graphCreator.generateRandomGraph(n, isDirected);
 
 			std::chrono::time_point<std::chrono::high_resolution_clock> start = std::chrono::high_resolution_clock::now();
 			algorithmsForTSP.bfs(graph, isDirected);
@@ -316,8 +316,10 @@ std::string startTest(std::string filename)
 			fout << delta.count() << ',';
 
 
+			isDirected = !isDirected;
+			
 			// --------------Directed-----------------------
-			graph = graphCreator.generateRandomGraph(n, 1);
+			graph = graphCreator.generateRandomGraph(n, isDirected);
 
 			start = std::chrono::high_resolution_clock::now();
 			algorithmsForTSP.bfs(graph, isDirected);
