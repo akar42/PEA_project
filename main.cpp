@@ -214,243 +214,243 @@ std::string startTest(std::string filename)
 	return "ok";
 }
 
-std::string tspLib(std::string filename)
-{
-	std::ifstream fin;
-	fin.open(filename);
+// std::string tspLib(std::string filename)
+// {
+// 	std::ifstream fin;
+// 	fin.open(filename);
 
-	if (!fin.is_open()) return "error";
+// 	if (!fin.is_open()) return "error";
 
-	std::string line;
-	do
-	{
-		fin >> line;
-	} while (line != "SA:");
+// 	std::string line;
+// 	do
+// 	{
+// 		fin >> line;
+// 	} while (line != "SA:");
 
-	bool sa = false;
-	bool ts = false;
+// 	bool sa = false;
+// 	bool ts = false;
 
-	fin >> line;
+// 	fin >> line;
 
-	if (line == "TRUE") 
-	{
-		sa = true;
-	}
+// 	if (line == "TRUE") 
+// 	{
+// 		sa = true;
+// 	}
 
-	do
-	{
-		fin >> line;
-	} while (line != "TS:");
+// 	do
+// 	{
+// 		fin >> line;
+// 	} while (line != "TS:");
 
-	fin >> line;
+// 	fin >> line;
 
-	if (line == "TRUE") ts = true;
+// 	if (line == "TRUE") ts = true;
 
-	do
-	{
-		fin >> line;
-	} while (line != "DATA:");
+// 	do
+// 	{
+// 		fin >> line;
+// 	} while (line != "DATA:");
 
-	std::string data_filename;
-	fin >> data_filename;
-
-
-	do
-	{
-		fin >> line;
-	} while (line != "BEST_KNOWN_RESULT:");
-
-	int32_t best_known_result = 0;
-	fin >> best_known_result;
+// 	std::string data_filename;
+// 	fin >> data_filename;
 
 
-	do
-	{
-		fin >> line;
-	} while (line != "OUTPUT:");
+// 	do
+// 	{
+// 		fin >> line;
+// 	} while (line != "BEST_KNOWN_RESULT:");
 
-	std::string output_filename;
-	fin >> output_filename;
+// 	int32_t best_known_result = 0;
+// 	fin >> best_known_result;
 
-	do
-	{
-		fin >> line;
-	} while (line != "ITERATION_NUMBER:");
 
-	int32_t iteration_number = 0;
-	fin >> iteration_number;
+// 	do
+// 	{
+// 		fin >> line;
+// 	} while (line != "OUTPUT:");
 
-	do
-	{
-		fin >> line;
-	} while (line != "TIME_LIMIT:");
+// 	std::string output_filename;
+// 	fin >> output_filename;
 
-	double time_limit = 0.0;
-	fin >> time_limit;
+// 	do
+// 	{
+// 		fin >> line;
+// 	} while (line != "ITERATION_NUMBER:");
 
-	do
-	{
-		fin >> line;
-	} while (line != "LOGS:");
+// 	int32_t iteration_number = 0;
+// 	fin >> iteration_number;
 
-	bool logs = false;
+// 	do
+// 	{
+// 		fin >> line;
+// 	} while (line != "TIME_LIMIT:");
 
-	fin >> line;
+// 	double time_limit = 0.0;
+// 	fin >> time_limit;
 
-	if (line == "TRUE") logs = true;
+// 	do
+// 	{
+// 		fin >> line;
+// 	} while (line != "LOGS:");
 
-	std::vector<double> sa_alphas;
-	std::vector<int32_t> ts_neighbours;
+// 	bool logs = false;
 
-	if (sa)
-	{
-		do
-		{
-			fin >> line;
-		} while (line != "AMOUNT:");
+// 	fin >> line;
 
-		int32_t amount = 0;
-		fin >> amount;
+// 	if (line == "TRUE") logs = true;
 
-		do
-		{
-			fin >> line;
-		} while (line != "ALPHA:");
+// 	std::vector<double> sa_alphas;
+// 	std::vector<int32_t> ts_neighbours;
 
-		for (int i = 0; i < amount; i++)
-		{
-			double alpha = 0.0;
-			fin >> alpha;
-			sa_alphas.push_back(alpha);
-		}
+// 	if (sa)
+// 	{
+// 		do
+// 		{
+// 			fin >> line;
+// 		} while (line != "AMOUNT:");
+
+// 		int32_t amount = 0;
+// 		fin >> amount;
+
+// 		do
+// 		{
+// 			fin >> line;
+// 		} while (line != "ALPHA:");
+
+// 		for (int i = 0; i < amount; i++)
+// 		{
+// 			double alpha = 0.0;
+// 			fin >> alpha;
+// 			sa_alphas.push_back(alpha);
+// 		}
 		
-	}
+// 	}
 
-	if (ts)
-	{
-		do
-		{
-			fin >> line;
-		} while (line != "AMOUNT:");
+// 	if (ts)
+// 	{
+// 		do
+// 		{
+// 			fin >> line;
+// 		} while (line != "AMOUNT:");
 
-		int32_t amount = 0;
-		fin >> amount;
+// 		int32_t amount = 0;
+// 		fin >> amount;
 
-		do
-		{
-			fin >> line;
-		} while (line != "NEIGHBOUR_STRATEGY:");
+// 		do
+// 		{
+// 			fin >> line;
+// 		} while (line != "NEIGHBOUR_STRATEGY:");
 
-		for (int i = 0; i < amount; i++)
-		{
-			double strategy = 0.0;
-			fin >> strategy;
-			ts_neighbours.push_back(strategy);
-		}
-	}
+// 		for (int i = 0; i < amount; i++)
+// 		{
+// 			double strategy = 0.0;
+// 			fin >> strategy;
+// 			ts_neighbours.push_back(strategy);
+// 		}
+// 	}
 
-	fin.close();
+// 	fin.close();
 
-	graphCreator graphCreator;
-	graph = graphCreator.readGraphFromATSP(data_filename);
+// 	graphCreator graphCreator;
+// 	graph = graphCreator.readGraphFromATSP(data_filename);
 
-	if (graph.empty())
-		return "error";
+// 	if (graph.empty())
+// 		return "error";
 
-	std::ofstream fout;
+// 	std::ofstream fout;
 
-	fout.open(output_filename);
+// 	fout.open(output_filename);
 
-	if(!fout.is_open()) return "error";
+// 	if(!fout.is_open()) return "error";
 
-	algorithmsForTSP algorithmsForTSP;
+// 	algorithmsForTSP algorithmsForTSP;
 
-	if (sa)
-	{
-		fout << "Simmulated annealing" << '\n';
-		fout << "Alpha,Best known result,Current result,Route,Time" << '\n';
-		for (double alpha : sa_alphas)
-		{
-			for (int i = 0; i < iteration_number; i++)
-			{
-				double execution_time = 0.0;
-				std::pair<int32_t, std::vector<int32_t>> sa_result = algorithmsForTSP.sa_with_time_limit(graph, alpha, time_limit, execution_time, logs);
+// 	if (sa)
+// 	{
+// 		fout << "Simmulated annealing" << '\n';
+// 		fout << "Alpha,Best known result,Current result,Route,Time" << '\n';
+// 		for (double alpha : sa_alphas)
+// 		{
+// 			for (int i = 0; i < iteration_number; i++)
+// 			{
+// 				double execution_time = 0.0;
+// 				std::pair<int32_t, std::vector<int32_t>> sa_result = algorithmsForTSP.sa_with_time_limit(graph, alpha, time_limit, execution_time, logs);
 
-				if (logs)
-				{
-					std::cout << "Execution time: " << execution_time << " s" << '\n';
-					std::cout << "Cost: " << sa_result.first << '\n';
-					std::cout << "Relative error: " << (double) abs(sa_result.first - best_known_result) / best_known_result << '\n';
-				}
+// 				if (logs)
+// 				{
+// 					std::cout << "Execution time: " << execution_time << " s" << '\n';
+// 					std::cout << "Cost: " << sa_result.first << '\n';
+// 					std::cout << "Relative error: " << (double) abs(sa_result.first - best_known_result) / best_known_result << '\n';
+// 				}
 
-				fout << alpha << ',' << best_known_result << ',' << sa_result.first << ',';
+// 				fout << alpha << ',' << best_known_result << ',' << sa_result.first << ',';
 
-				std::ostringstream ss_route;
+// 				std::ostringstream ss_route;
 				
-				for (int i = 0; i < sa_result.second.size(); i++)
-				{
-					ss_route << sa_result.second[i] << '-';
-				}
+// 				for (int i = 0; i < sa_result.second.size(); i++)
+// 				{
+// 					ss_route << sa_result.second[i] << '-';
+// 				}
 
-				ss_route << sa_result.second[0];
+// 				ss_route << sa_result.second[0];
 
-				std::string route = ss_route.str();
+// 				std::string route = ss_route.str();
 
-				if (logs)
-				{
-					std::cout << route << '\n';
-				}
+// 				if (logs)
+// 				{
+// 					std::cout << route << '\n';
+// 				}
 
-				fout << route << ',' << execution_time << '\n';
-			}
-		}
-	}
+// 				fout << route << ',' << execution_time << '\n';
+// 			}
+// 		}
+// 	}
 
-	if (ts)
-	{
-		fout << "Tabu search" << '\n';
-		fout << "Neighbour strategy,Best known result,Current result,Route,Time" << '\n';
-		for (int32_t strategy : ts_neighbours)
-		{
-			for (int i = 0; i < iteration_number; i++)
-			{
-				double execution_time = 0.0;
-				std::pair<int32_t, std::vector<int32_t>> ts_result = algorithmsForTSP.ts_with_time_limit(graph, strategy, time_limit, execution_time, logs);
+// 	if (ts)
+// 	{
+// 		fout << "Tabu search" << '\n';
+// 		fout << "Neighbour strategy,Best known result,Current result,Route,Time" << '\n';
+// 		for (int32_t strategy : ts_neighbours)
+// 		{
+// 			for (int i = 0; i < iteration_number; i++)
+// 			{
+// 				double execution_time = 0.0;
+// 				std::pair<int32_t, std::vector<int32_t>> ts_result = algorithmsForTSP.ts_with_time_limit(graph, strategy, time_limit, execution_time, logs);
 
-				if (logs)
-				{
-					std::cout << "Execution time: " << execution_time << " s" << '\n';
-					std::cout << "Cost: " << ts_result.first << '\n';
-					std::cout << "Relative error: " << (double) abs(ts_result.first - best_known_result) / best_known_result << '\n';
-				}
+// 				if (logs)
+// 				{
+// 					std::cout << "Execution time: " << execution_time << " s" << '\n';
+// 					std::cout << "Cost: " << ts_result.first << '\n';
+// 					std::cout << "Relative error: " << (double) abs(ts_result.first - best_known_result) / best_known_result << '\n';
+// 				}
 
-				fout << strategy << ',' << best_known_result << ',' << ts_result.first << ',';
+// 				fout << strategy << ',' << best_known_result << ',' << ts_result.first << ',';
 
-				std::ostringstream ss_route;
+// 				std::ostringstream ss_route;
 				
-				for (int i = 0; i < ts_result.second.size(); i++)
-				{
-					ss_route << ts_result.second[i] << '-';
-				}
+// 				for (int i = 0; i < ts_result.second.size(); i++)
+// 				{
+// 					ss_route << ts_result.second[i] << '-';
+// 				}
 
-				ss_route << ts_result.second[0];
+// 				ss_route << ts_result.second[0];
 
-				std::string route = ss_route.str();
+// 				std::string route = ss_route.str();
 
-				if (logs)
-				{
-					std::cout << route << '\n';
-				}
+// 				if (logs)
+// 				{
+// 					std::cout << route << '\n';
+// 				}
 
-				fout << route << ',' << execution_time << '\n';
-			}
-		}
-	}
+// 				fout << route << ',' << execution_time << '\n';
+// 			}
+// 		}
+// 	}
 
-	fout.close();
+// 	fout.close();
 
-	return "ok";
-}
+// 	return "ok";
+// }
 
 void help()
 {
