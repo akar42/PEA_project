@@ -2,6 +2,7 @@
 *.txt
 *.csv
 *.atsp
+*.zip
 
 .vscode/
 .vs/
