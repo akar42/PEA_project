@@ -4,6 +4,7 @@
 #include <vector>
 #include <random>
 #include <time.h>
+#include <iostream>
 
 class graphCreator
 {
@@ -14,4 +15,5 @@ private:
 public:
 	std::vector<std::vector<int32_t>> generateRandomGraph(int32_t verticies, bool isDirected);
 	std::vector<std::vector<int32_t>> readGraphFromFile(std::string filename);
+	std::vector<std::vector<int32_t>> readGraphFromATSP(std::string filename);
 };

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <fstream>
 #include <windows.h>
 #include <vector>
@@ -10,6 +11,7 @@ std::string readFile(std::string filename);
 std::string generate(bool isDirected, int32_t verticies);
 void help();
 std::string startTest(std::string filename);
+std::string tspLib(std::string filename);
 
 std::vector<std::vector<int32_t>> graph;
 
@@ -42,6 +44,19 @@ int main(int argc, char **argv)
 	else if (argc == 3 && option == "-f")
 	{
 		sourceOfGraph = readFile(argv[2]);
+
+		if (sourceOfGraph == "error")
+		{
+			SetConsoleTextAttribute(hConsole, 4);
+			std::cout << "Error:";
+			SetConsoleTextAttribute(hConsole, 15);
+			std::cout << " Some problems with provided file" << '\n';
+			return -1;
+		}
+	}
+	else if (argc == 3 && option == "-t3")
+	{
+		sourceOfGraph = tspLib(argv[2]);
 
 		if (sourceOfGraph == "error")
 		{
@@ -107,47 +122,69 @@ int main(int argc, char **argv)
 
 	algorithmsForTSP algorithmsForTSP;
 
-	std::cout << '\n' << "---Algorithms for solving TSP---" << '\n';
+	// std::cout << '\n' << "---Algorithms for solving TSP---" << '\n';
 
 
-	std::cout << '\n';
+	// std::cout << '\n';
 
-	std::cout << sourceOfGraph << " graph:" << '\n';
+	// std::cout << sourceOfGraph << " graph:" << '\n';
 
-	SetConsoleTextAttribute(hConsole, 3);
+	// SetConsoleTextAttribute(hConsole, 3);
 
-	std::cout << "V_i\\V_j\t| ";
+	// std::cout << "V_i\\V_j\t| ";
 
-	for (int j = 0; j < graph.size(); j++)
-	{
-		std::cout << j << '\t';
-	}
+	// for (int j = 0; j < graph.size(); j++)
+	// {
+	// 	std::cout << j << '\t';
+	// }
 
-	std::cout << '\n';
+	// std::cout << '\n';
 
-	for (int i = 0; i < 8 * (graph.size() + 1); i++)
-	{
-		if (i == 8)
-			std::cout << '+';
-		else
-			std::cout << '-';
-	}
+	// for (int i = 0; i < 8 * (graph.size() + 1); i++)
+	// {
+	// 	if (i == 8)
+	// 		std::cout << '+';
+	// 	else
+	// 		std::cout << '-';
+	// }
 
-	std::cout << '\n';
+	// std::cout << '\n';
 
-	for (int i = 0; i < graph.size(); ++i)
-	{
-		std::cout << i << "\t| ";
+	// for (int i = 0; i < graph.size(); ++i)
+	// {
+	// 	std::cout << i << "\t| ";
 
-		for (int j = 0; j < graph[i].size(); ++j)
-		{
-			std::cout << graph[i][j] << '\t';
-		}
-		std::cout << '\n';
-	}
+	// 	for (int j = 0; j < graph[i].size(); ++j)
+	// 	{
+	// 		std::cout << graph[i][j] << '\t';
+	// 	}
+	// 	std::cout << '\n';
+	// }
 
 	SetConsoleTextAttribute(hConsole, 15);
+
+	// double execution_time = 0.0;
+	// std::pair<int32_t, std::vector<int32_t>> sa_result = algorithmsForTSP.sa_with_time_limit(graph, 0.99995, 240, execution_time, true);
+	// // std::pair<int32_t, std::vector<int32_t>> sa_result = algorithmsForTSP.ts_with_time_limit(graph, 1, 120, execution_time, true);
 	
+	// std::cout << "Final Cost: " << sa_result.first << '\n';
+	// for (int32_t el : sa_result.second)
+	// {
+	// 	std::cout << el << '-';
+	// }
+
+	// std::cout << sa_result.second[0] << '\n';
+
+	// double error1 = 1.0 * (sa_result.first - 1776) / 1776;
+	// double error2 = 1.0 * (sa_result.first - 2755) / 2755;
+	// double error3 = 1.0 * (sa_result.first - 2465) / 2465;
+
+	// std::cout << "Relative error for ftv47.atsp: " << error1 << '\n';
+	// std::cout << "Relative error for ftv170.atsp: " << error2 << '\n';
+	// std::cout << "Relative error for rbg403.atsp: " << error3 << '\n';
+
+	// std::cout << "Execution time: " << execution_time << " s"<<'\n';
+
 	return 0;
 }
 
@@ -174,6 +211,244 @@ std::string generate(bool isDirected, int32_t verticies)
 
 std::string startTest(std::string filename)
 {
+	return "ok";
+}
+
+std::string tspLib(std::string filename)
+{
+	std::ifstream fin;
+	fin.open(filename);
+
+	if (!fin.is_open()) return "error";
+
+	std::string line;
+	do
+	{
+		fin >> line;
+	} while (line != "SA:");
+
+	bool sa = false;
+	bool ts = false;
+
+	fin >> line;
+
+	if (line == "TRUE") 
+	{
+		sa = true;
+	}
+
+	do
+	{
+		fin >> line;
+	} while (line != "TS:");
+
+	fin >> line;
+
+	if (line == "TRUE") ts = true;
+
+	do
+	{
+		fin >> line;
+	} while (line != "DATA:");
+
+	std::string data_filename;
+	fin >> data_filename;
+
+
+	do
+	{
+		fin >> line;
+	} while (line != "BEST_KNOWN_RESULT:");
+
+	int32_t best_known_result = 0;
+	fin >> best_known_result;
+
+
+	do
+	{
+		fin >> line;
+	} while (line != "OUTPUT:");
+
+	std::string output_filename;
+	fin >> output_filename;
+
+	do
+	{
+		fin >> line;
+	} while (line != "ITERATION_NUMBER:");
+
+	int32_t iteration_number = 0;
+	fin >> iteration_number;
+
+	do
+	{
+		fin >> line;
+	} while (line != "TIME_LIMIT:");
+
+	double time_limit = 0.0;
+	fin >> time_limit;
+
+	do
+	{
+		fin >> line;
+	} while (line != "LOGS:");
+
+	bool logs = false;
+
+	fin >> line;
+
+	if (line == "TRUE") logs = true;
+
+	std::vector<double> sa_alphas;
+	std::vector<int32_t> ts_neighbours;
+
+	if (sa)
+	{
+		do
+		{
+			fin >> line;
+		} while (line != "AMOUNT:");
+
+		int32_t amount = 0;
+		fin >> amount;
+
+		do
+		{
+			fin >> line;
+		} while (line != "ALPHA:");
+
+		for (int i = 0; i < amount; i++)
+		{
+			double alpha = 0.0;
+			fin >> alpha;
+			sa_alphas.push_back(alpha);
+		}
+		
+	}
+
+	if (ts)
+	{
+		do
+		{
+			fin >> line;
+		} while (line != "AMOUNT:");
+
+		int32_t amount = 0;
+		fin >> amount;
+
+		do
+		{
+			fin >> line;
+		} while (line != "NEIGHBOUR_STRATEGY:");
+
+		for (int i = 0; i < amount; i++)
+		{
+			double strategy = 0.0;
+			fin >> strategy;
+			ts_neighbours.push_back(strategy);
+		}
+	}
+
+	fin.close();
+
+	graphCreator graphCreator;
+	graph = graphCreator.readGraphFromATSP(data_filename);
+
+	if (graph.empty())
+		return "error";
+
+	std::ofstream fout;
+
+	fout.open(output_filename);
+
+	if(!fout.is_open()) return "error";
+
+	algorithmsForTSP algorithmsForTSP;
+
+	if (sa)
+	{
+		fout << "Simmulated annealing" << '\n';
+		fout << "Alpha,Best known result,Current result,Route,Time" << '\n';
+		for (double alpha : sa_alphas)
+		{
+			for (int i = 0; i < iteration_number; i++)
+			{
+				double execution_time = 0.0;
+				std::pair<int32_t, std::vector<int32_t>> sa_result = algorithmsForTSP.sa_with_time_limit(graph, alpha, time_limit, execution_time, logs);
+
+				if (logs)
+				{
+					std::cout << "Execution time: " << execution_time << " s" << '\n';
+					std::cout << "Cost: " << sa_result.first << '\n';
+					std::cout << "Relative error: " << (double) abs(sa_result.first - best_known_result) / best_known_result << '\n';
+				}
+
+				fout << alpha << ',' << best_known_result << ',' << sa_result.first << ',';
+
+				std::ostringstream ss_route;
+				
+				for (int i = 0; i < sa_result.second.size(); i++)
+				{
+					ss_route << sa_result.second[i] << '-';
+				}
+
+				ss_route << sa_result.second[0];
+
+				std::string route = ss_route.str();
+
+				if (logs)
+				{
+					std::cout << route << '\n';
+				}
+
+				fout << route << ',' << execution_time << '\n';
+			}
+		}
+	}
+
+	if (ts)
+	{
+		fout << "Tabu search" << '\n';
+		fout << "Neighbour strategy,Best known result,Current result,Route,Time" << '\n';
+		for (int32_t strategy : ts_neighbours)
+		{
+			for (int i = 0; i < iteration_number; i++)
+			{
+				double execution_time = 0.0;
+				std::pair<int32_t, std::vector<int32_t>> ts_result = algorithmsForTSP.ts_with_time_limit(graph, strategy, time_limit, execution_time, logs);
+
+				if (logs)
+				{
+					std::cout << "Execution time: " << execution_time << " s" << '\n';
+					std::cout << "Cost: " << ts_result.first << '\n';
+					std::cout << "Relative error: " << (double) abs(ts_result.first - best_known_result) / best_known_result << '\n';
+				}
+
+				fout << strategy << ',' << best_known_result << ',' << ts_result.first << ',';
+
+				std::ostringstream ss_route;
+				
+				for (int i = 0; i < ts_result.second.size(); i++)
+				{
+					ss_route << ts_result.second[i] << '-';
+				}
+
+				ss_route << ts_result.second[0];
+
+				std::string route = ss_route.str();
+
+				if (logs)
+				{
+					std::cout << route << '\n';
+				}
+
+				fout << route << ',' << execution_time << '\n';
+			}
+		}
+	}
+
+	fout.close();
+
 	return "ok";
 }
 

@@ -64,3 +64,48 @@ std::vector<std::vector<int32_t>> graphCreator::readGraphFromFile(std::string fi
 
 	return result;
 }
+
+std::vector<std::vector<int32_t>> graphCreator::readGraphFromATSP(std::string filename)
+{
+	std::vector<std::vector<int32_t>> result;
+
+	std::ifstream fin;
+	fin.open(filename);
+	if (fin.is_open())
+	{
+		std::string line;
+		do
+		{
+			fin >> line;
+		}
+		while (line != "DIMENSION:");
+
+		uint32_t verticies = 0;
+
+		fin >> verticies;
+
+		do
+		{
+			fin >> line;
+		}
+		while (line != "EDGE_WEIGHT_SECTION");
+		
+
+		for (int i = 0; i < verticies; ++i)
+		{
+			result.push_back(std::vector<int32_t>(verticies, -1));
+
+			for (int j = 0; j < verticies; ++j)
+			{
+				fin >> result[i][j];
+
+				// Adjusting main diagonal
+				if (result[i][j] == 100000000 || result[i][j] == 0) result[i][j] = -1;
+			}
+		}
+
+		fin.close(); 
+	}
+
+	return result;
+}
