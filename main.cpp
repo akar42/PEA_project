@@ -66,6 +66,9 @@ int main(int argc, char **argv)
 			std::cout << " Some problems with provided file" << '\n';
 			return -1;
 		}
+
+		// graphCreator graphCreator;
+		// graph = graphCreator.readGraphFromATSP(argv[2]);
 	}
 	else if (argc == 3 && option == "-t")
 	{
@@ -163,6 +166,11 @@ int main(int argc, char **argv)
 
 	SetConsoleTextAttribute(hConsole, 15);
 
+
+	// std::pair<int32_t, std::vector<int32_t>> gen_result = algorithmsForTSP.genetic_algorithm(graph, 100*graph.size(), 1, 2, 0.8, 0.01, 3*120);
+
+	// std::cout << "Final cost:" << gen_result.first << '\n';
+
 	// double execution_time = 0.0;
 	// std::pair<int32_t, std::vector<int32_t>> sa_result = algorithmsForTSP.sa_with_time_limit(graph, 0.99995, 240, execution_time, true);
 	// // std::pair<int32_t, std::vector<int32_t>> sa_result = algorithmsForTSP.ts_with_time_limit(graph, 1, 120, execution_time, true);
@@ -214,243 +222,437 @@ std::string startTest(std::string filename)
 	return "ok";
 }
 
-// std::string tspLib(std::string filename)
-// {
-// 	std::ifstream fin;
-// 	fin.open(filename);
+std::string tspLib(std::string filename)
+{
+	std::ifstream fin;
+	fin.open(filename);
 
-// 	if (!fin.is_open()) return "error";
+	if (!fin.is_open()) return "error";
 
-// 	std::string line;
-// 	do
-// 	{
-// 		fin >> line;
-// 	} while (line != "SA:");
+	std::string line;
+	do
+	{
+		fin >> line;
+	} while (line != "SA:");
 
-// 	bool sa = false;
-// 	bool ts = false;
+	bool sa = false;
+	bool ts = false;
+	bool gen = false;
 
-// 	fin >> line;
+	fin >> line;
 
-// 	if (line == "TRUE") 
-// 	{
-// 		sa = true;
-// 	}
+	if (line == "TRUE") 
+	{
+		sa = true;
+	}
 
-// 	do
-// 	{
-// 		fin >> line;
-// 	} while (line != "TS:");
+	do
+	{
+		fin >> line;
+	} while (line != "TS:");
 
-// 	fin >> line;
+	fin >> line;
 
-// 	if (line == "TRUE") ts = true;
+	if (line == "TRUE") ts = true;
 
-// 	do
-// 	{
-// 		fin >> line;
-// 	} while (line != "DATA:");
+	do
+	{
+		fin >> line;
+	} while (line != "GEN:");
 
-// 	std::string data_filename;
-// 	fin >> data_filename;
+	fin >> line;
+
+	if (line == "TRUE") gen = true;
+
+	do
+	{
+		fin >> line;
+	} while (line != "DATA:");
+
+	std::string data_filename;
+	fin >> data_filename;
 
 
-// 	do
-// 	{
-// 		fin >> line;
-// 	} while (line != "BEST_KNOWN_RESULT:");
+	do
+	{
+		fin >> line;
+	} while (line != "BEST_KNOWN_RESULT:");
 
-// 	int32_t best_known_result = 0;
-// 	fin >> best_known_result;
+	int32_t best_known_result = 0;
+	fin >> best_known_result;
 
 
-// 	do
-// 	{
-// 		fin >> line;
-// 	} while (line != "OUTPUT:");
+	do
+	{
+		fin >> line;
+	} while (line != "OUTPUT:");
 
-// 	std::string output_filename;
-// 	fin >> output_filename;
+	std::string output_filename;
+	fin >> output_filename;
 
-// 	do
-// 	{
-// 		fin >> line;
-// 	} while (line != "ITERATION_NUMBER:");
+	do
+	{
+		fin >> line;
+	} while (line != "ITERATION_NUMBER:");
 
-// 	int32_t iteration_number = 0;
-// 	fin >> iteration_number;
+	int32_t iteration_number = 0;
+	fin >> iteration_number;
 
-// 	do
-// 	{
-// 		fin >> line;
-// 	} while (line != "TIME_LIMIT:");
 
-// 	double time_limit = 0.0;
-// 	fin >> time_limit;
+	do
+	{
+		fin >> line;
+	} while (line != "TIME_LIMIT:");
 
-// 	do
-// 	{
-// 		fin >> line;
-// 	} while (line != "LOGS:");
+	double time_limit = 0.0;
+	fin >> time_limit;
 
-// 	bool logs = false;
 
-// 	fin >> line;
+	do
+	{
+		fin >> line;
+	} while (line != "LOGS:");
 
-// 	if (line == "TRUE") logs = true;
+	bool logs = false;
 
-// 	std::vector<double> sa_alphas;
-// 	std::vector<int32_t> ts_neighbours;
+	fin >> line;
 
-// 	if (sa)
-// 	{
-// 		do
-// 		{
-// 			fin >> line;
-// 		} while (line != "AMOUNT:");
+	if (line == "TRUE") logs = true;
 
-// 		int32_t amount = 0;
-// 		fin >> amount;
+	std::vector<double> sa_alphas;
+	std::vector<int32_t> ts_neighbours;
 
-// 		do
-// 		{
-// 			fin >> line;
-// 		} while (line != "ALPHA:");
 
-// 		for (int i = 0; i < amount; i++)
-// 		{
-// 			double alpha = 0.0;
-// 			fin >> alpha;
-// 			sa_alphas.push_back(alpha);
-// 		}
+	if (sa)
+	{
+		do
+		{
+			fin >> line;
+		} while (line != "AMOUNT:");
+
+		int32_t amount = 0;
+		fin >> amount;
+
+		do
+		{
+			fin >> line;
+		} while (line != "ALPHA:");
+
+		for (int i = 0; i < amount; i++)
+		{
+			double alpha = 0.0;
+			fin >> alpha;
+			sa_alphas.push_back(alpha);
+		}
 		
-// 	}
+	}
 
-// 	if (ts)
-// 	{
-// 		do
-// 		{
-// 			fin >> line;
-// 		} while (line != "AMOUNT:");
+	if (ts)
+	{
 
-// 		int32_t amount = 0;
-// 		fin >> amount;
+		do
+		{
+			fin >> line;
+		} while (line != "AMOUNT:");
 
-// 		do
-// 		{
-// 			fin >> line;
-// 		} while (line != "NEIGHBOUR_STRATEGY:");
+		int32_t amount = 0;
+		fin >> amount;
 
-// 		for (int i = 0; i < amount; i++)
-// 		{
-// 			double strategy = 0.0;
-// 			fin >> strategy;
-// 			ts_neighbours.push_back(strategy);
-// 		}
-// 	}
+		do
+		{
+			fin >> line;
+		} while (line != "NEIGHBOUR_STRATEGY:");
 
-// 	fin.close();
+		for (int i = 0; i < amount; i++)
+		{
+			double strategy = 0.0;
+			fin >> strategy;
+			ts_neighbours.push_back(strategy);
+		}
+	}
 
-// 	graphCreator graphCreator;
-// 	graph = graphCreator.readGraphFromATSP(data_filename);
+	std::vector<int32_t> colony_sizes;
+	std::vector<float> crossover_rates;
+	std::vector<float> mutation_rates;
+	std::vector<int32_t> crossover_strategies;
+	std::vector<int32_t> mutation_strategies;
 
-// 	if (graph.empty())
-// 		return "error";
+	if (gen)
+	{
+		do
+		{
+			fin >> line;
+		} while (line != "[FOR_GEN]");
+		
+		do
+		{
+			fin >> line;
+		} while (line != "AMOUNT:");
 
-// 	std::ofstream fout;
+		int32_t amount = 0;
+		fin >> amount;
 
-// 	fout.open(output_filename);
 
-// 	if(!fout.is_open()) return "error";
+		do
+		{
+			fin >> line;
+		} while (line != "COLONY_SIZE:");
 
-// 	algorithmsForTSP algorithmsForTSP;
+		for (int i = 0; i < amount; i++)
+		{
+			int32_t colony_size;
+			fin >> colony_size;
+			colony_sizes.push_back(colony_size);
+		}
 
-// 	if (sa)
-// 	{
-// 		fout << "Simmulated annealing" << '\n';
-// 		fout << "Alpha,Best known result,Current result,Route,Time" << '\n';
-// 		for (double alpha : sa_alphas)
-// 		{
-// 			for (int i = 0; i < iteration_number; i++)
-// 			{
-// 				double execution_time = 0.0;
-// 				std::pair<int32_t, std::vector<int32_t>> sa_result = algorithmsForTSP.sa_with_time_limit(graph, alpha, time_limit, execution_time, logs);
+		do
+		{
+			fin >> line;
+		} while (line != "AMOUNT:");
 
-// 				if (logs)
-// 				{
-// 					std::cout << "Execution time: " << execution_time << " s" << '\n';
-// 					std::cout << "Cost: " << sa_result.first << '\n';
-// 					std::cout << "Relative error: " << (double) abs(sa_result.first - best_known_result) / best_known_result << '\n';
-// 				}
+		amount = 0;
+		fin >> amount;
 
-// 				fout << alpha << ',' << best_known_result << ',' << sa_result.first << ',';
 
-// 				std::ostringstream ss_route;
+		do
+		{
+			fin >> line;
+		} while (line != "CROSSOVER_RATE:");
+
+		for (int i = 0; i < amount; i++)
+		{
+			float crossover_rate;
+			fin >> crossover_rate;
+			crossover_rates.push_back(crossover_rate);
+		}
+
+		do
+		{
+			fin >> line;
+		} while (line != "AMOUNT:");
+
+		amount = 0;
+		fin >> amount;
+
+		do
+		{
+			fin >> line;
+		} while (line != "MUTATION_RATE:");
+
+		for (int i = 0; i < amount; i++)
+		{
+			float mutation_rate;
+			fin >> mutation_rate;
+			mutation_rates.push_back(mutation_rate);
+		}
+
+		do
+		{
+			fin >> line;
+		} while (line != "AMOUNT:");
+
+		amount = 0;
+		fin >> amount;
+
+		do
+		{
+			fin >> line;
+		} while (line != "CROSSOVER_STRATEGY:");
+
+		for (int i = 0; i < amount; i++)
+		{
+			int32_t crossover_strategy;
+			fin >> crossover_strategy;
+			crossover_strategies.push_back(crossover_strategy);
+		}
+
+		do
+		{
+			fin >> line;
+		} while (line != "AMOUNT:");
+
+		amount = 0;
+		fin >> amount;
+
+		do
+		{
+			fin >> line;
+		} while (line != "MUTATION_STRATEGY:");
+
+		for (int i = 0; i < amount; i++)
+		{
+			int32_t mutation_strategy;
+			fin >> mutation_strategy;
+			mutation_strategies.push_back(mutation_strategy);
+		}
+	}
+
+	fin.close();
+
+	graphCreator graphCreator;
+	graph = graphCreator.readGraphFromATSP(data_filename);
+
+	for (auto &colony_size: colony_sizes)
+	{
+		colony_size *= graph.size();
+	}
+
+	if (graph.empty())
+		return "error";
+
+	std::ofstream fout;
+
+	fout.open(output_filename);
+
+	if(!fout.is_open()) return "error";
+
+	algorithmsForTSP algorithmsForTSP;
+
+	// std::cout << "Colony sizes: ";
+	// for (auto size : colony_sizes)
+	// 	std::cout << size << " ";
+	// std::cout << "\nCrossover rates: ";
+	// for (auto rate : crossover_rates)
+	// 	std::cout << rate << " ";
+	// std::cout << "\nMutation rates: ";
+	// for (auto rate : mutation_rates)
+	// 	std::cout << rate << " ";
+	// std::cout << "\nCrossover strategies: ";
+	// for (auto strat : crossover_strategies)
+	// 	std::cout << strat << " ";
+	// std::cout << "\nMutation strategies: ";
+	// for (auto strat : mutation_strategies)
+	// 	std::cout << strat << " ";
+	// std::cout << "\nIteration number: " << iteration_number << "\n";
+
+	if (gen)
+	{
+		fout << "Mutation rate" << '\n';
+		fout << "Colony size, Crossover rate, Mutation rate, Crossover strategy, Mutation strategy, Time, Result, Best known result, Route" << '\n';
+		for (int32_t colony_size : colony_sizes)
+		{
+			for (float crossover_rate : crossover_rates)
+			{
+				for (float mutation_rate : mutation_rates)
+				{
+					for (int32_t crossover_strategy : crossover_strategies)
+					{
+						for (int32_t mutation_strategy : mutation_strategies)
+						{
+							for (int i = 0; i < iteration_number; i++)
+							{
+								auto result = algorithmsForTSP.genetic_algorithm(graph, colony_size, crossover_strategy, mutation_strategy, crossover_rate, mutation_rate, time_limit);
+								fout << colony_size << ',' << crossover_rate << ',' << mutation_rate << ',' << crossover_strategy << ',' << mutation_strategy << ',' << time_limit << ',' << result.first << ',' << best_known_result << ',';
+
+
+								std::ostringstream ss_route;
+
+								for (int i = 0; i < result.second.size(); i++)
+								{
+									ss_route << result.second[i] << '-';
+								}
+
+								ss_route << result.second[0];
+
+								std::string route = ss_route.str();
+
+
+								fout << route << '\n';
+
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// if (sa)
+	// {
+	// 	fout << "Simmulated annealing" << '\n';
+	// 	fout << "Alpha,Best known result,Current result,Route,Time" << '\n';
+	// 	for (double alpha : sa_alphas)
+	// 	{
+	// 		for (int i = 0; i < iteration_number; i++)
+	// 		{
+	// 			double execution_time = 0.0;
+	// 			std::pair<int32_t, std::vector<int32_t>> sa_result = algorithmsForTSP.sa_with_time_limit(graph, alpha, time_limit, execution_time, logs);
+
+	// 			if (logs)
+	// 			{
+	// 				std::cout << "Execution time: " << execution_time << " s" << '\n';
+	// 				std::cout << "Cost: " << sa_result.first << '\n';
+	// 				std::cout << "Relative error: " << (double) abs(sa_result.first - best_known_result) / best_known_result << '\n';
+	// 			}
+
+	// 			fout << alpha << ',' << best_known_result << ',' << sa_result.first << ',';
+
+	// 			std::ostringstream ss_route;
 				
-// 				for (int i = 0; i < sa_result.second.size(); i++)
-// 				{
-// 					ss_route << sa_result.second[i] << '-';
-// 				}
+	// 			for (int i = 0; i < sa_result.second.size(); i++)
+	// 			{
+	// 				ss_route << sa_result.second[i] << '-';
+	// 			}
 
-// 				ss_route << sa_result.second[0];
+	// 			ss_route << sa_result.second[0];
 
-// 				std::string route = ss_route.str();
+	// 			std::string route = ss_route.str();
 
-// 				if (logs)
-// 				{
-// 					std::cout << route << '\n';
-// 				}
+	// 			if (logs)
+	// 			{
+	// 				std::cout << route << '\n';
+	// 			}
 
-// 				fout << route << ',' << execution_time << '\n';
-// 			}
-// 		}
-// 	}
+	// 			fout << route << ',' << execution_time << '\n';
+	// 		}
+	// 	}
+	// }
 
-// 	if (ts)
-// 	{
-// 		fout << "Tabu search" << '\n';
-// 		fout << "Neighbour strategy,Best known result,Current result,Route,Time" << '\n';
-// 		for (int32_t strategy : ts_neighbours)
-// 		{
-// 			for (int i = 0; i < iteration_number; i++)
-// 			{
-// 				double execution_time = 0.0;
-// 				std::pair<int32_t, std::vector<int32_t>> ts_result = algorithmsForTSP.ts_with_time_limit(graph, strategy, time_limit, execution_time, logs);
+	// if (ts)
+	// {
+	// 	fout << "Tabu search" << '\n';
+	// 	fout << "Neighbour strategy,Best known result,Current result,Route,Time" << '\n';
+	// 	for (int32_t strategy : ts_neighbours)
+	// 	{
+	// 		for (int i = 0; i < iteration_number; i++)
+	// 		{
+	// 			double execution_time = 0.0;
+	// 			std::pair<int32_t, std::vector<int32_t>> ts_result = algorithmsForTSP.ts_with_time_limit(graph, strategy, time_limit, execution_time, logs);
 
-// 				if (logs)
-// 				{
-// 					std::cout << "Execution time: " << execution_time << " s" << '\n';
-// 					std::cout << "Cost: " << ts_result.first << '\n';
-// 					std::cout << "Relative error: " << (double) abs(ts_result.first - best_known_result) / best_known_result << '\n';
-// 				}
+	// 			if (logs)
+	// 			{
+	// 				std::cout << "Execution time: " << execution_time << " s" << '\n';
+	// 				std::cout << "Cost: " << ts_result.first << '\n';
+	// 				std::cout << "Relative error: " << (double) abs(ts_result.first - best_known_result) / best_known_result << '\n';
+	// 			}
 
-// 				fout << strategy << ',' << best_known_result << ',' << ts_result.first << ',';
+	// 			fout << strategy << ',' << best_known_result << ',' << ts_result.first << ',';
 
-// 				std::ostringstream ss_route;
+	// 			std::ostringstream ss_route;
 				
-// 				for (int i = 0; i < ts_result.second.size(); i++)
-// 				{
-// 					ss_route << ts_result.second[i] << '-';
-// 				}
+	// 			for (int i = 0; i < ts_result.second.size(); i++)
+	// 			{
+	// 				ss_route << ts_result.second[i] << '-';
+	// 			}
 
-// 				ss_route << ts_result.second[0];
+	// 			ss_route << ts_result.second[0];
 
-// 				std::string route = ss_route.str();
+	// 			std::string route = ss_route.str();
 
-// 				if (logs)
-// 				{
-// 					std::cout << route << '\n';
-// 				}
+	// 			if (logs)
+	// 			{
+	// 				std::cout << route << '\n';
+	// 			}
 
-// 				fout << route << ',' << execution_time << '\n';
-// 			}
-// 		}
-// 	}
+	// 			fout << route << ',' << execution_time << '\n';
+	// 		}
+	// 	}
+	// }
 
-// 	fout.close();
+	fout.close();
 
-// 	return "ok";
-// }
+	return "ok";
+}
 
 void help()
 {
